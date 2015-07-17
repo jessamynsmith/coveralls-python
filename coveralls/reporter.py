@@ -21,9 +21,9 @@ class CoverallReporter(Reporter):
         `outfile` is a file object to write the json to.
         """
         self.source_files = []
-        self.find_code_units(morfs)
+        self.find_file_reporters(morfs)
 
-        for cu in self.code_units:
+        for cu in self.file_reporters:
             try:
                 self.parse_file(cu, self.coverage._analyze(cu))
             except NoSource:
@@ -69,7 +69,7 @@ class CoverallReporter(Reporter):
                          'Please check if encoding declaration is ok', basename(cu.filename))
                 return
         else:
-            filename = analysis.coverage.file_locator.relative_filename(cu.filename)
+            filename = cu.relative_filename()
             source_lines = list(enumerate(analysis.file_reporter.source_token_lines()))
             source = analysis.file_reporter.source()
         coverage_lines = [self.get_hits(i, analysis) for i in range(1, len(source_lines) + 1)]
